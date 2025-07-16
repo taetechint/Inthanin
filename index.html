@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>คุณเป็นคนภาพฤรดูไหน?</title>
+  <title>คุณเป็นคนฤดูไหน?</title>
   <style>
     body {
       font-family: 'Prompt', sans-serif;
@@ -11,7 +11,7 @@
       text-align: center;
       padding: 5vw;
     }
-    #question-box, #result-box {
+    #start-box, #question-box, #result-box {
       background: white;
       padding: 8vw;
       border-radius: 12px;
@@ -39,19 +39,41 @@
       margin-top: 20px;
       width: 60vw;
     }
+    .brand-logos {
+      margin-top: 5vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5vw;
+      flex-wrap: wrap;
+    }
+    .brand-logos img {
+      max-height: 12vw;
+      height: auto;
+    }
   </style>
 </head>
 <body>
 
-  <div id="question-box">
+  <div id="start-box">
+    <h2>ยินดีต้อนรับเข้าสู่การค้นหาตัวตน</h2>
+    <p>มาดูกันว่าคุณคือ "คนฤดูไหน" 🌤</p>
+    <div class="brand-logos">
+      <img src="bangchak.png" alt="Bangchak Logo">
+      <img src="inthanin.png" alt="Inthanin Logo">
+    </div>
+    <button onclick="startQuiz()">เริ่มมม!</button>
+  </div>
+
+  <div id="question-box" style="display:none;">
     <h2 id="question">คำถามจะอยู่ตรงนี้</h2>
     <button onclick="nextQuestion()">คำตอบ 1</button>
     <button onclick="nextQuestion()">คำตอบ 2</button>
   </div>
 
   <div id="result-box" style="display:none;">
-    <h2>คุณคือคนภาพุรดู <span id="season-result"></span> 🌤</h2>
-    <p>เอา QR Code นี้ไปสแกนเล่น หรือวาดรูปจากกากกะแฟเพ เพื่อเพิ่มความแม่นยำก็ได้นะ 🦥</p>
+    <h2>คุณคือคนฤดู <span id="season-result"></span> 🌤</h2>
+    <p>เอา QR Code นี้ไปสแกนเล่น หรือวาดรูปจากกากกะแฟเพื่อเพิ่มความแม่นยำก็ได้นะ 🦥</p>
     <img id="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://example.com/play" alt="QR Code">
   </div>
 
@@ -66,6 +88,12 @@
     const seasons = ["ร้อน", "ฝน", "หนาว", "ผลิ"];
 
     let current = 0;
+
+    function startQuiz() {
+      document.getElementById("start-box").style.display = "none";
+      document.getElementById("question-box").style.display = "block";
+      document.getElementById("question").innerText = questions[0];
+    }
 
     function nextQuestion() {
       current++;
@@ -82,9 +110,6 @@
       document.getElementById("question-box").style.display = "none";
       document.getElementById("result-box").style.display = "block";
     }
-
-    // Init
-    document.getElementById("question").innerText = questions[0];
   </script>
 
 </body>
