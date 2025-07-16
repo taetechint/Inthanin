@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>คุณเป็นคนภาพฤรดูไหน?</title>
+  <style>
+    body {
+      font-family: 'Prompt', sans-serif;
+      background: #f4f4f4;
+      text-align: center;
+      padding: 50px;
+    }
+    #question-box, #result-box {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #ff8c00;
+      color: white;
+      font-size: 16px;
+    }
+    #qr {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="question-box">
+    <h2 id="question">คำถามจะอยู่ตรงนี้</h2>
+    <button onclick="nextQuestion()">คำตอบ 1</button>
+    <button onclick="nextQuestion()">คำตอบ 2</button>
+  </div>
+
+  <div id="result-box" style="display:none;">
+    <h2>คุณคือคนภาพุรดู <span id="season-result"></span> 🌤</h2>
+    <p>เอา QR Code นี้ไปสแกนเล่น หรือวาดรูปจากกากกะแฟเพ เพื่อเพิ่มความแม่นยำก็ได้นะ 🦥</p>
+    <img id="qr" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://example.com/play" alt="QR Code">
+  </div>
+
+  <script>
+    const questions = [
+      "ถ้าคุณเป็นสัตว์ คุณจะเป็น: 🐸 กบใส่แว่น หรือ 🐘 ช้างขี่สเก็ต?",
+      "ตอนตื่นนอน คุณอยากได้ยินเสียง: 🎺 ทรัมเป็ต หรือ 🐔 ไก่แร็ปเปอร์?",
+      "ในกระเป๋าตอนนี้ คุณน่าจะมี: 🧻 การเป็นชำระเบียบพับสวย หรือ 🧄 กระเทียม?",
+      "ถ้าไปเที่ยว คุณจะเลือก: 🚀 ยานแม่ หรือ 🐌 เดินกับหอยทาก?"
+    ];
+
+    const seasons = ["ร้อน", "ฝน", "หนาว", "ผลิ"];
+
+    let current = 0;
+
+    function nextQuestion() {
+      current++;
+      if (current < questions.length) {
+        document.getElementById("question").innerText = questions[current];
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      const season = seasons[Math.floor(Math.random() * seasons.length)];
+      document.getElementById("season-result").innerText = season;
+      document.getElementById("question-box").style.display = "none";
+      document.getElementById("result-box").style.display = "block";
+    }
+
+    // Init
+    document.getElementById("question").innerText = questions[0];
+  </script>
+
+</body>
+</html>
