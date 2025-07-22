@@ -58,10 +58,13 @@
       50% { transform: scale(1.05); }
       100% { transform: scale(1); }
     }
-    @keyframes shake {
-      0% { transform: rotate(-1deg); }
-      100% { transform: rotate(1deg); }
-    }
+  @keyframes shake {
+  0% { transform: rotate(-4deg) translateX(-2px); }
+  25% { transform: rotate(4deg) translateX(2px); }
+  50% { transform: rotate(-4deg) translateX(-2px); }
+  75% { transform: rotate(4deg) translateX(2px); }
+  100% { transform: rotate(-4deg) translateX(-2px); }
+}
     .confetti {
       position: absolute;
       width: 100%;
