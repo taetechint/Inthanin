@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>What is your season?</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #fef6ff, #e0f7fa);
+      color: black;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      text-align: center;
+    }
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+    .logo-container img {
+      height: 60px;
+    }
+    .start-screen,
+    .quiz-container,
+    .result-container {
+      display: none;
+    }
+    .active {
+      display: block;
+    }
+    .question {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+    .answers button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      font-size: 1rem;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      cursor: pointer;
+      background-color: #fff;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+      transition: all 0.2s ease-in-out;
+      color: black;
+    }
+    .answers button:hover {
+      background-color: #ffe0f0;
+      border-color: #ff80ab;
+      transform: translateY(-3px);
+    }
+    .result-container {
+      background: #fff0f5;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255, 192, 203, 0.4);
+    }
+    .result-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: black;
+    }
+    button {
+      background-color: #ff80ab;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background-color: #ff4d88;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="start-screen active" role="region" aria-label="Start Screen">
+      <div class="logo-container">
+        <img src="logo _inthanin.png" alt="Inthanin Coffee Logo" />
+        <img src="logo bangchak.png" alt="Bangchak Corporation Logo" />
+      </div>
+      <h1>What is your season?</h1>
+      <button onclick="startQuiz()" aria-label="Start the season quiz" role="button" tabindex="0">Start Now</button>
+    </div>
+
+    <div class="quiz-container" role="region" aria-label="Quiz Questions">
+      <div id="question-container">
+        <div id="question" class="question"></div>
+        <div id="answers" class="answers"></div>
+      </div>
+    </div>
+
+    <div class="result-container" role="region" aria-label="Quiz Result">
+      <div class="result-title" id="result-title"></div>
+      <div style="margin-top: 20px;">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://www.inthanincoffee.com" alt="QR Code to Inthanin Coffee Website" style="max-width: 100%; height: auto;"/>
+      </div>
+      <button onclick="resetQuiz()" aria-label="Try the quiz again" role="button">Try Again</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "What kind of activity do you enjoy the most?",
+        answers: [
+          { text: "Beach and sunshine", season: "summer" },
+          { text: "Reading and hot tea", season: "winter" },
+          { text: "Hiking and nature", season: "autumn" },
+          { text: "Café hopping and flowers", season: "spring" }
+        ]
+      },
+      {
+        question: "What's your favorite color tone?",
+        answers: [
+          { text: "Bright and vivid", season: "summer" },
+          { text: "Earth tones", season: "autumn" },
+          { text: "Pastel", season: "spring" },
+          { text: "Black & White", season: "winter" }
+        ]
+      },
+      {
+        question: "What kind of music do you play in the car?",
+        answers: [
+          { text: "pop", season: "spring" },
+          { text: "R&B", season: "autumn" },
+          { text: "Indie and moody", season: "winter" },
+          { text: "Hype EDM", season: "summer" }
+        ]
+      },
+      {
+        question: "What time of day do you enjoy the most?",
+        answers: [
+          { text: "Early morning ", season: "summer" },
+          { text: "Quiet late night", season: "winter" },
+          { text: "Golden hour in the evening", season: "autumn" },
+          { text: "Late morning with soft breeze", season: "spring" }
+        ]
+      },
+      {
+        question: "How would you describe yourself?",
+        answers: [
+          { text: "energetic and playful", season: "summer" },
+          { text: "Sweet and soft", season: "spring" },
+          { text: "Deep and calm", season: "autumn" },
+          { text: "cold and mysterious", season: "winter" }
+        ]
+      }
+    ];
+
+    let currentQuestion = 0;
+    const scores = { spring: 0, summer: 0, autumn: 0, winter: 0 };
+
+    const startScreen = document.querySelector('.start-screen');
+    const quizContainer = document.querySelector('.quiz-container');
+    const resultContainer = document.querySelector('.result-container');
+    const questionElement = document.getElementById('question');
+    const answersElement = document.getElementById('answers');
+    const resultTitle = document.getElementById('result-title');
+
+    function startQuiz() {
+      startScreen.classList.remove('active');
+      quizContainer.classList.add('active');
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      questionElement.textContent = q.question;
+      answersElement.innerHTML = '';
+      q.answers.forEach(a => {
+        const btn = document.createElement('button');
+        btn.textContent = a.text;
+        btn.setAttribute('aria-label', a.text);
+        btn.setAttribute('role', 'button');
+        btn.setAttribute('tabindex', '0');
+        btn.onclick = () => selectAnswer(a.season);
+        answersElement.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(season) {
+      scores[season]++;
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      quizContainer.classList.remove('active');
+      resultContainer.classList.add('active');
+      const topSeason = Object.entries(scores).sort((a,b) => b[1]-a[1])[0][0];
+      const seasonNames = {
+        summer: "You are Summer ☀️ Bright & Fun!",
+        winter: "You are Winter ❄️ Calm & Cool!",
+        autumn: "You are Autumn 🍁 Deep & Cozy!",
+        spring: "You are Spring 🌸 Soft & Sweet!"
+      };
+      resultTitle.textContent = seasonNames[topSeason];
+    }
+
+    function resetQuiz() {
+      currentQuestion = 0;
+      for (let key in scores) scores[key] = 0;
+      resultContainer.classList.remove('active');
+      startScreen.classList.add('active');
+    }
+  </script>
+</body>
+</html>
